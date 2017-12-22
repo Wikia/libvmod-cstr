@@ -4,7 +4,6 @@ before_install:
   - sudo apt-get update -q
   - sudo apt-get install -qq apt-transport-https python-docutils gnupg curl
   - curl -sL https://packagecloud.io/varnishcache/varnish41/gpgkey | sudo apt-key add -
-  - sudo apt-get update
   - echo "deb https://packagecloud.io/varnishcache/varnish41/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/varnish-cache.list
   - sudo apt-get -q update
   - sudo apt-get install varnish varnish-dev
@@ -21,4 +20,3 @@ script:
 compiler:
   - clang
   - gcc
-
