@@ -16,8 +16,8 @@ SYNOPSIS
 
 ::
 
-import cstr;
-cstr.escape(<string>);
+	import cstr;
+	cstr.escape(<string>);
 
 DESCRIPTION
 ===========
