@@ -26,6 +26,7 @@ Varnish Module (vmod) to escape characters unsafe for printing from a string.
 
 Based on:
 * https://github.com/fastly/libvmod-urlcode
+
 * https://github.com/varnishcache/libvmod-example
 
 FUNCTIONS
