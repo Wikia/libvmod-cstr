@@ -1,0 +1,32 @@
+varnishtest "Test cstr vmod"
+
+server s1 {
+       rxreq 
+       txresp -hdr "Foo1: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~" \
+              -hdr "Foo2: Hello\\World" \
+              -hdr "Foo9: ab\"c" \
+              -hdr "Connection: close" \
+              -body "Hi!\n"
+} -start
+
+varnish v1 -vcl+backend {
+  import cstr from "${vmod_topbuild}/src/.libs/libvmod_cstr.so";
+
+  sub vcl_backend_response {
+    set beresp.http.Bar1 = cstr.escape(beresp.http.Foo1);
+    set beresp.http.Bar2 = cstr.escape(beresp.http.Foo2);
+    set beresp.http.Bar9 = cstr.escape(beresp.http.Foo9);
+  }
+} -start
+
+client c1 {
+  txreq -url "/"
+  rxresp
+  expect resp.status == 200
+  expect resp.http.X-Varnish == "1001"
+  expect resp.http.bar1 == "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~"
+  expect resp.http.bar2 == "Hello\\\\World"
+  expect resp.http.bar9 == "ab\\\"c"
+}
+
+client c1 -run
